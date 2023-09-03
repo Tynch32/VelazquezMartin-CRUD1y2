@@ -46,7 +46,7 @@ const controller = {
 	// Update - Form to edit
 	edit: (req, res) => {
 		const product = products.find((product) => product.id === +req.params.id)
-		return res.render("product-edit-form", {
+		return res.render('product-edit-form', {
 			...product
 		});
 	},
@@ -69,7 +69,7 @@ const controller = {
 	},
 	// Delete - Delete one product from DB
 	destroy: (req, res) => {
-		const productsModify = products.filter(products => product.id != +req.params.id);
+		const productsModify = products.filter(product => product.id != +req.params.id);
 		fs.writeFileSync(productsFilePath, JSON.stringify(productsModify, null, 3), 'utf8');
 		return res.redirect('/products');
 	}
