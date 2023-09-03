@@ -28,16 +28,17 @@ const controller = {
 	},
 	// Create -  Method to store
 	store: (req, res) => {
-		const { name, price, discount, description, category } = req.body;
+		const producto = req.body;
 		let newProducts = {
 			id: products[products.length - 1].id + 1,
-			name: name.trim(),
-			price: +price,
-			discount: +discount,
-			category,
-			description: description.trim(),
-			image: null
+			name: producto.name.trim(),
+			price: +producto.price,
+			discount: +producto.discount,
+			category: producto.category,
+			description: producto.description.trim(),
+			image : null
 		}
+		newProducts.image=req.file.originalname;
 		products.push(newProducts);
 		fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 3), 'utf8');
 		return res.redirect('/products');
@@ -52,8 +53,8 @@ const controller = {
 	},
 	// Update - Method to update
 	update: (req, res) => {
-		const { name, price, discount, description, category } = req.body;
-
+		const { name, price, discount, description, category, image } = req.body;
+		const nombreDeLaImagen=req.file.originalname;
 		const productModify = products.map(product => {
 			if (product.id === +req.params.id) {
 				product.name = name.trim();
@@ -61,6 +62,7 @@ const controller = {
 				product.discount = +discount;
 				product.category = category;
 				product.description = description.trim();
+				product.image=nombreDeLaImagen;
 			}
 			return product
 		});
