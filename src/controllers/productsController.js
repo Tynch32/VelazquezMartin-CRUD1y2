@@ -38,7 +38,9 @@ const controller = {
 			description: producto.description.trim(),
 			image : null
 		}
-		newProducts.image=req.file.originalname;
+		if(req.file!==undefined){
+			newProducts.image=req.file.originalname;
+		}
 		products.push(newProducts);
 		fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 3), 'utf8');
 		return res.redirect('/products');
@@ -53,8 +55,11 @@ const controller = {
 	},
 	// Update - Method to update
 	update: (req, res) => {
-		const { name, price, discount, description, category, image } = req.body;
-		const nombreDeLaImagen=req.file.originalname;
+		const { name, price, discount, description, category, image} = req.body;
+		let nombreDeLaImagen = null;
+		if(req.file!==undefined){
+			nombreDeLaImagen = req.file.originalname;
+		}
 		const productModify = products.map(product => {
 			if (product.id === +req.params.id) {
 				product.name = name.trim();
@@ -62,7 +67,9 @@ const controller = {
 				product.discount = +discount;
 				product.category = category;
 				product.description = description.trim();
-				product.image=nombreDeLaImagen;
+				if(product.image==null){
+					product.image=nombreDeLaImagen;
+				}
 			}
 			return product
 		});
